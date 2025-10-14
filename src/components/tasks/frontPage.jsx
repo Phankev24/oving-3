@@ -1,4 +1,3 @@
-// src/components/tasks/frontPage.jsx
 import React from "react";
 import { TaskList } from "./taskList.jsx";
 import { NewTaskForm } from "./newTaskForm.jsx";
