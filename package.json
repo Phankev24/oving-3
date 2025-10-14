@@ -6,7 +6,8 @@
   "scripts": {
     "test": "prettier --check .",
     "prepare": "husky",
-    "dev": "vite"
+    "dev": "vite",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -22,13 +23,14 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
-    "vite": "^7.1.5"
+    "vite": "^7.1.10"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.5",
+    "@vitejs/plugin-react": "^5.0.4",
     "hono": "^4.9.12",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.4"
   }
 }
