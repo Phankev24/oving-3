@@ -1,25 +1,24 @@
 import React, { useState } from "react";
 
-export function NewTaskForm({ onNewTask }) {
+export function TaskForm({ onAddTask }) {
   const [summary, setSummary] = useState("");
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [owner, setOwner] = useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    onNewTask({
+    onAddTask({
       summary,
-      completed: false,
       category,
       status,
       dueDate,
       owner,
+      completed: false,
     });
 
-    // Reset form
     setSummary("");
     setCategory("");
     setStatus("");
@@ -28,9 +27,9 @@ export function NewTaskForm({ onNewTask }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="task-form">
+    <form onSubmit={handleSubmit}>
       <div>
-        <strong>Summary:</strong>
+        <label>Summary (required):</label>
         <input
           type="text"
           value={summary}
@@ -40,7 +39,7 @@ export function NewTaskForm({ onNewTask }) {
       </div>
 
       <div>
-        <strong>Category:</strong>
+        <label>Category:</label>
         <input
           type="text"
           value={category}
@@ -49,7 +48,7 @@ export function NewTaskForm({ onNewTask }) {
       </div>
 
       <div>
-        <strong>Status:</strong>
+        <label>Status:</label>
         <select value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="">Select status</option>
           <option value="Not started">Not started</option>
@@ -59,7 +58,7 @@ export function NewTaskForm({ onNewTask }) {
       </div>
 
       <div>
-        <strong>Due Date:</strong>
+        <label>Due Date:</label>
         <input
           type="date"
           value={dueDate}
@@ -68,7 +67,7 @@ export function NewTaskForm({ onNewTask }) {
       </div>
 
       <div>
-        <strong>Owner:</strong>
+        <label>Owner:</label>
         <input
           type="text"
           value={owner}
@@ -76,9 +75,7 @@ export function NewTaskForm({ onNewTask }) {
         />
       </div>
 
-      <div>
-        <button>Create Task</button>
-      </div>
+      <button type="submit">Create Task</button>
     </form>
   );
 }

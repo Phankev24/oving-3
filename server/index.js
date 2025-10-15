@@ -3,7 +3,6 @@ import { serve } from "@hono/node-server";
 
 const app = new Hono();
 
-// In-memory tasks with all fields
 let tasks = [
   {
     id: 0,
@@ -25,43 +24,44 @@ let tasks = [
   },
   {
     id: 2,
-    summary: "Introduce JavaScript",
-    completed: true,
-    category: "Learning",
-    status: "Done",
-    dueDate: "2025-10-17",
-    owner: "Kevin",
-  },
-  {
-    id: 3,
-    summary: "Update state for checkboxes",
+    summary: "Learn React basics",
     completed: false,
-    category: "Development",
+    category: "Learning",
     status: "In progress",
-    dueDate: "2025-10-18",
+    dueDate: "2025-10-20",
     owner: "Kevin",
   },
 ];
 
-// Get all tasks
-app.get("/api/tasks", (c) => c.json(tasks));
+app.get("/api/tasks", (c) => {
+  return c.json(tasks);
+});
 
-// Create new task
 app.post("/api/tasks", async (c) => {
-  const body = await c.req.json();
-  const newTask = { id: tasks.length, completed: false, ...body };
+  const newTask = await c.req.json();
+
+  newTask.id = tasks.length;
+  newTask.completed = newTask.completed || false;
+
   tasks.push(newTask);
   return c.json(newTask);
 });
 
-// Update task
 app.put("/api/tasks/:id", async (c) => {
   const id = parseInt(c.req.param("id"));
-  const delta = await c.req.json();
-  tasks = tasks.map((t) => (t.id === id ? { ...t, ...delta } : t));
-  return c.json(tasks.find((t) => t.id === id));
+  const updates = await c.req.json();
+
+  tasks = tasks.map((task) => {
+    if (task.id === id) {
+      return { ...task, ...updates };
+    }
+    return task;
+  });
+
+  const updatedTask = tasks.find((task) => task.id === id);
+  return c.json(updatedTask);
 });
 
-// Start server
-serve(app, { port: 3000 });
-console.log("Hono server running on http://localhost:3000");
+serve({ fetch: app.fetch, port: 3000 }, () => {
+  console.log("Server running on http://localhost:3000");
+});

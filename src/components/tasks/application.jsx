@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FrontPage } from "./frontPage.jsx";
 import { Route, Routes } from "react-router-dom";
-import { TaskRoute } from "./taskRoute";
+import { FrontPage } from "./frontPage.jsx";
+import { TaskPage } from "./taskPage.jsx";
 
 export function Application() {
   const [tasks, setTasks] = useState([]);
@@ -9,28 +9,29 @@ export function Application() {
   useEffect(() => {
     fetch("/api/tasks")
       .then((res) => res.json())
-      .then((data) => setTasks(data))
-      .catch((err) => console.error("Error fetching tasks:", err));
+      .then((data) => setTasks(data));
   }, []);
 
-  function handleNewTask(task) {
+  function addTask(task) {
     fetch("/api/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(task),
     })
       .then((res) => res.json())
-      .then((newTask) => setTasks((old) => [...old, newTask]));
+      .then((newTask) => setTasks([...tasks, newTask]));
   }
 
-  function handleUpdateTask(id, delta) {
-    setTasks((old) => old.map((o) => (id === o.id ? { ...o, ...delta } : o)));
+  function updateTask(id, changes) {
+    setTasks(
+      tasks.map((task) => (task.id === id ? { ...task, ...changes } : task)),
+    );
 
     fetch(`/api/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(delta),
-    }).catch((err) => console.error("Error updating task:", err));
+      body: JSON.stringify(changes),
+    });
   }
 
   return (
@@ -40,16 +41,14 @@ export function Application() {
         element={
           <FrontPage
             tasks={tasks}
-            onCompleted={({ id }, completed) =>
-              handleUpdateTask(id, { completed })
-            }
-            onNewTask={handleNewTask}
+            onAddTask={addTask}
+            onUpdateTask={updateTask}
           />
         }
       />
       <Route
         path="/tasks/:id"
-        element={<TaskRoute tasks={tasks} onUpdateTask={handleUpdateTask} />}
+        element={<TaskPage tasks={tasks} onUpdateTask={updateTask} />}
       />
     </Routes>
   );

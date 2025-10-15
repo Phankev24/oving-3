@@ -1,14 +1,15 @@
 import React from "react";
 import { TaskList } from "./taskList.jsx";
-import { NewTaskForm } from "./newTaskForm.jsx";
+import { TaskForm } from "./taskForm.jsx";
 
-export function FrontPage(props) {
+export function FrontPage({ tasks, onAddTask, onUpdateTask }) {
   return (
-    <>
-      <h1>Tasks</h1>
-      <TaskList tasks={props.tasks} onItemChecked={props.onCompleted} />
-      <h2>Create new task</h2>
-      <NewTaskForm onNewTask={props.onNewTask} />
-    </>
+    <div>
+      <h1>My Tasks</h1>
+      <TaskList tasks={tasks} onUpdateTask={onUpdateTask} />
+
+      <h2>Add New Task</h2>
+      <TaskForm onAddTask={onAddTask} />
+    </div>
   );
 }
