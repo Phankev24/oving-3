@@ -5,14 +5,11 @@ export function TaskList({ tasks, onItemChecked }) {
   return (
     <ul>
       {tasks.map(({ id, completed, summary, category, dueDate, owner }) => (
-        <li
-          key={id}
-          // style={{ textDecoration: completed ? "line-through" : undefined }}
-        >
+        <li key={id}>
           <input
             type="checkbox"
             checked={completed}
-            onChange={(e) => onItemChecked(id, e.target.checked)}
+            onChange={(e) => onItemChecked({ id }, e.target.checked)}
           />{" "}
           <Link to={`/tasks/${id}`}>{summary}</Link>
           <div>

@@ -20,8 +20,7 @@ export function Application() {
       body: JSON.stringify(task),
     })
       .then((res) => res.json())
-      .then((newTask) => setTasks((old) => [...old, newTask]))
-      .catch((err) => console.error("Error creating task:", err));
+      .then((newTask) => setTasks((old) => [...old, newTask]));
   }
 
   function handleUpdateTask(id, delta) {

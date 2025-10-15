@@ -6,7 +6,7 @@ export function FrontPage(props) {
   return (
     <>
       <h1>Tasks</h1>
-      <TaskList tasks={props.tasks} onItemChecked={props.onItemChecked} />
+      <TaskList tasks={props.tasks} onItemChecked={props.onCompleted} />
       <h2>Create new task</h2>
       <NewTaskForm onNewTask={props.onNewTask} />
     </>
