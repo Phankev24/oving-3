@@ -17,7 +17,8 @@ export function TaskList({ tasks, onUpdateTask }) {
           <Link to={`/tasks/${task.id}`}>{task.summary}</Link>
 
           <div>
-            {task.category && <span> {task.category} </span>}
+            <span> Task: {task.id} </span>
+            {task.category && <span>- {task.category} </span>}
             {task.owner && <span>- {task.owner} </span>}
             {task.dueDate && <span>- {task.dueDate}</span>}
           </div>

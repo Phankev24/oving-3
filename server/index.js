@@ -37,6 +37,17 @@ app.get("/api/tasks", (c) => {
   return c.json(tasks);
 });
 
+app.get("/api/tasks/:id", (c) => {
+  const id = parseInt(c.req.param("id"));
+  const task = tasks.find((t) => t.id === id);
+
+  if (!task) {
+    return c.json({ error: "Task not found" }, 404);
+  }
+
+  return c.json(task);
+});
+
 app.post("/api/tasks", async (c) => {
   const newTask = await c.req.json();
 
