@@ -1,8 +1,10 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
 
 const app = new Hono();
 
+// In-memory tasks
 let tasks = [
   {
     id: 0,
@@ -33,19 +35,9 @@ let tasks = [
   },
 ];
 
+// API Routes
 app.get("/api/tasks", (c) => {
   return c.json(tasks);
-});
-
-app.get("/api/tasks/:id", (c) => {
-  const id = parseInt(c.req.param("id"));
-  const task = tasks.find((t) => t.id === id);
-
-  if (!task) {
-    return c.json({ error: "Task not found" }, 404);
-  }
-
-  return c.json(task);
 });
 
 app.post("/api/tasks", async (c) => {
@@ -73,6 +65,16 @@ app.put("/api/tasks/:id", async (c) => {
   return c.json(updatedTask);
 });
 
-serve({ fetch: app.fetch, port: 3000 }, () => {
-  console.log("Server running on http://localhost:3000");
-});
+// Serve React app (AFTER API routes so API takes priority)
+app.use("*", serveStatic({ root: "../dist" }));
+
+// Start server - Use Heroku's PORT or default to 3000
+serve(
+  {
+    fetch: app.fetch,
+    port: parseInt(process.env.PORT || "3000"),
+  },
+  (info) => {
+    console.log(`Server running on http://localhost:${info.port}`);
+  },
+);
